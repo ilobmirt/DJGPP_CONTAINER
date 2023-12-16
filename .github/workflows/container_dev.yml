@@ -46,6 +46,6 @@ jobs:
       - name: GITHUB - Push our container
         run: |
           docker push ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
-      - name: DOCKERHUB - logout
+      - name: GITHUB - logout
         run: |
           docker logout
