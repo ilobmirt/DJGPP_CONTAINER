@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: DOCKERHUB - Build our container
         run: |
-          echo "IMAGE_ID=$(docker build -q --tag "$BRANCH_MANAGER/$CONTAINER_NAME:latest" -f "./Containerfile" --squash)"  >> "$GITHUB_ENV"
+          echo "IMAGE_ID=$(docker buildx build --tag $BRANCH_MANAGER/$CONTAINER_NAME:latest --file ./Containerfile --quiet --squash )"  >> "$GITHUB_ENV"
       - name: DOCKERHUB - Login
         env:
           LOGIN_USER: ${{ secrets.DOCKER_USER }}
