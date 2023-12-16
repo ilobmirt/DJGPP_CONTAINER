@@ -4,20 +4,38 @@ on:
   schedule:
     - cron: '0 0 * * 1'
 
+env:
+  BRANCH_MANAGER: ilobmirt
+  CONTAINER_NAME: djgpp_container
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Docker login
+      - name: DOCKERHUB - Build our container
+        run: |
+          echo ::set-env name=IMAGE_ID::$(docker build -q --tag $BRANCH_MANAGER/$CONTAINER_NAME:latest -f ./Containerfile --squash)
+      - name: DOCKERHUB - Login
         env:
           LOGIN_USER: ${{ secrets.DOCKER_USER }}
           LOGIN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker login -u $LOGIN_USER -p $LOGIN_PASSWORD
-      - name: Build our container
+      - name: DOCKERHUB - Push our container
         run: |
-          docker build --tag debian:djgpp_container -f ./Containerfile --squash
-      - name: Push our container
+          docker push $BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: GITHUB - login
+        env:
+          LOGIN_USER: ilobmirt
+          LOGIN_PASSWORD: ${{ secrets.GCR_PASSWORD }}
         run: |
-          docker push debian:djgpp_container
+          docker login -u $LOGIN_USER -p $LOGIN_PASSWORD ghcr.io
+      - name: GITHUB - Re-Label our container
+        env:
+          TARGET_ID: ${{ env.IMAGE_ID }}
+        run: |
+          docker tag TARGET_ID ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: GITHUB - Push our container
+        run: |
+          docker push ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
