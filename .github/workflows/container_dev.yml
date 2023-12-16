@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: DOCKERHUB - Build our container
         run: |
           echo "IMAGE_ID=$(docker buildx build --tag $BRANCH_MANAGER/$CONTAINER_NAME:latest --file ./Containerfile --quiet --squash )"  >> "$GITHUB_ENV"
