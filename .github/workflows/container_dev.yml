@@ -1,0 +1,14 @@
+name: Regular Container Builds
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build our container
+        run: |
+          docker build --tag debian:djgpp_container -f ./Containerfile --squash
