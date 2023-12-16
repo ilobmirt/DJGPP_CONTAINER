@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: SYSTEM - WHATs local?
+      - name: SYSTEM - Whats local?
         run: |
           ls -hal
       - name: DOCKERHUB - Build our container
@@ -25,16 +25,19 @@ jobs:
           LOGIN_USER: ${{ secrets.DOCKER_USER }}
           LOGIN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-          docker login -u $LOGIN_USER -p $LOGIN_PASSWORD
+          echo $LOGIN_PASSWORD | docker login -u $LOGIN_USER --password-stdin
       - name: DOCKERHUB - Push our container
         run: |
           docker push $BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: DOCKERHUB - logout
+        run: |
+          docker logout
       - name: GITHUB - login
         env:
           LOGIN_USER: ilobmirt
           LOGIN_PASSWORD: ${{ secrets.GCR_PASSWORD }}
         run: |
-          docker login -u $LOGIN_USER -p $LOGIN_PASSWORD ghcr.io
+          echo $LOGIN_PASSWORD | docker login -u $LOGIN_USER --password-stdin ghcr.io
       - name: GITHUB - Re-Label our container
         env:
           TARGET_ID: ${{ env.IMAGE_ID }}
@@ -43,3 +46,6 @@ jobs:
       - name: GITHUB - Push our container
         run: |
           docker push ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: DOCKERHUB - logout
+        run: |
+          docker logout
