@@ -9,6 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Docker login
+        env:
+          LOGIN_USER: ${{ secrets.DOCKER_USER }}
+          LOGIN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $LOGIN_USER -p $LOGIN_PASSWORD
       - name: Build our container
         run: |
           docker build --tag debian:djgpp_container -f ./Containerfile --squash
+      - name: Push our container
+        run: |
+          docker push debian:djgpp_container
