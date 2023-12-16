@@ -19,7 +19,7 @@ jobs:
           ls -hal
       - name: DOCKERHUB - Build our container
         run: |
-          echo "IMAGE_ID=$(docker buildx build --tag="$BRANCH_MANAGER/$CONTAINER_NAME:latest" --quiet --squash ./Containerfile)"  >> "$GITHUB_ENV"
+          echo "IMAGE_ID=$(docker buildx build --tag="$BRANCH_MANAGER/$CONTAINER_NAME:latest" --quiet --squash .)"  >> "$GITHUB_ENV"
       - name: DOCKERHUB - Login
         env:
           LOGIN_USER: ${{ secrets.DOCKER_USER }}
