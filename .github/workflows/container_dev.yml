@@ -17,35 +17,35 @@ jobs:
       - name: SYSTEM - Whats local?
         run: |
           ls -hal
-#      - name: DOCKERHUB - Build our container
-#        run: |
-#          echo "IMAGE_ID=$(docker buildx build --tag="$BRANCH_MANAGER/$CONTAINER_NAME:latest" --quiet --squash .)"  >> "$GITHUB_ENV"
+      - name: DOCKERHUB - Build our container
+        run: |
+          echo "IMAGE_ID=$(docker buildx build --tag="$BRANCH_MANAGER/$CONTAINER_NAME:latest" --quiet --squash .)"  >> "$GITHUB_ENV"
       - name: DOCKERHUB - Login
         env:
           LOGIN_USER: ${{ secrets.DOCKER_USER }}
           LOGIN_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo $LOGIN_PASSWORD | docker login -u $LOGIN_USER --password-stdin
-#      - name: DOCKERHUB - Push our container
-#        run: |
-#          docker push $BRANCH_MANAGER/$CONTAINER_NAME:latest
-#      - name: DOCKERHUB - logout
-#        run: |
-#          docker logout
-#      - name: GITHUB - login
-#        env:
-#          LOGIN_USER: ilobmirt
-#          LOGIN_PASSWORD: ${{ secrets.GCR_PASSWORD }}
-#        run: |
-#          echo $LOGIN_PASSWORD | docker login -u $LOGIN_USER --password-stdin ghcr.io
-#      - name: GITHUB - Re-Label our container
-#        env:
-#          TARGET_ID: ${{ env.IMAGE_ID }}
-#        run: |
-#          docker tag TARGET_ID ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
-#      - name: GITHUB - Push our container
-#        run: |
-#          docker push ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
-#      - name: GITHUB - logout
-#        run: |
-#          docker logout
+      - name: DOCKERHUB - Push our container
+        run: |
+          docker push $BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: DOCKERHUB - logout
+        run: |
+          docker logout
+      - name: GITHUB - login
+        env:
+          LOGIN_USER: ilobmirt
+          LOGIN_PASSWORD: ${{ secrets.GCR_PASSWORD }}
+        run: |
+          echo $LOGIN_PASSWORD | docker login -u $LOGIN_USER --password-stdin ghcr.io
+      - name: GITHUB - Re-Label our container
+        env:
+          TARGET_ID: ${{ env.IMAGE_ID }}
+        run: |
+          docker tag TARGET_ID ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: GITHUB - Push our container
+        run: |
+          docker push ghcr.io/$BRANCH_MANAGER/$CONTAINER_NAME:latest
+      - name: GITHUB - logout
+        run: |
+          docker logout
