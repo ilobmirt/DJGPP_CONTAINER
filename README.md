@@ -9,7 +9,7 @@ By encasulating the cross-compiler in a container, the developement environment 
 ---
 ### Image builds:
 
-The image for the container resides either here on github or on docker. Images are built every Monday at midnight. You can use these images by first importing them
+The image is built every Monday at midnight and pushed to both Github and Docker. You would get them by doing the following
 
 **Github Repository**
 ```
