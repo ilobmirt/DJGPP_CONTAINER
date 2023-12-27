@@ -17,9 +17,12 @@ jobs:
       - name: SYSTEM - Whats local?
         run: |
           ls -hal
-      - name: DOCKERHUB - Build our container
+      - name: SYSTEM - Build our container
         run: |
-          echo "IMAGE_ID=$(docker buildx build --tag="$BRANCH_MANAGER/$CONTAINER_NAME:latest" --quiet --squash .)"  >> "$GITHUB_ENV"
+          echo "IMAGE_ID=$(docker buildx build --tag="$BRANCH_MANAGER/$CONTAINER_NAME:latest" --quiet .)"  >> "$GITHUB_ENV"
+      - name: SYSTEM - Prune unneeded images
+        run: |
+          docker image prune
       - name: DOCKERHUB - Login
         env:
           LOGIN_USER: ${{ secrets.DOCKER_USER }}
